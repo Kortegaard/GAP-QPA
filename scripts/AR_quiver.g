@@ -1,22 +1,25 @@
 
 LoadPackage("QPA");
 BuildARQuiver := function(ModuleList, l)
-    local indecList, arrows, vertices, M, P, indec, n, vertexNam, layer, layer_num, entry_num, arr, flatVerticesList, v, Q;
-    #local vertexName;
-    indecList := [];
+    local arrows, vertices, M, P, indec, n, vertexNam, layer, layer_num, entry_num, arr, v, Q, dict,v_name;
+
 
     arrows := [];
     vertices := [];
     n:= 1; # Number of vertrices
-
+    dict := NewDictionary(false, true);
     for M in ModuleList do
         P := PredecessorsOfModule(M, l);
         layer_num := 1;
         for layer in P[1] do
             entry_num := 1;
             for indec in layer do
+                v_name := Concatenation("v", String(n));
+                n := n + 1;
+                AddDictionary(dict, [layer_num,entry_num], v_name);
+
                 Append(vertices, [rec(
-                    name:= Concatenation("L", String(layer_num), "E", String(entry_num)),
+                    name:= v_name,
                     module:=indec
                 )]);
                 entry_num := entry_num + 1;
@@ -27,19 +30,15 @@ BuildARQuiver := function(ModuleList, l)
         for layer in P[2] do
             for arr in layer do
                 Append(arrows, [[
-                    Concatenation("L", String(layer_num+1), "E", String(arr[1])), # FROM
-                    Concatenation("L", String(layer_num),   "E", String(arr[2]))  # TO
+                    LookupDictionary(dict, [layer_num + 1, arr[1]]), # FROM
+                    LookupDictionary(dict, [layer_num,     arr[2]]) # TO
                 ]]);
             od;
             layer_num := layer_num + 1;
         od;
     od;
 
-    flatVerticesList := [];
-    for v in vertices do
-        Append(flatVerticesList,[v.name]);
-    od;
-    Q := Quiver(flatVerticesList, arrows);
+    Q := Quiver(List(vertices, x -> x.name), arrows);
     return Q;
 end;
 
@@ -49,5 +48,6 @@ A := PathAlgebra(GF(3), Q);
 I := IndecInjectiveModules(A);
 
 
+#BuildARQuiver([I[1]],4);
 Display(BuildARQuiver([I[1]],4));
 
