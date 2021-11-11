@@ -30,12 +30,9 @@ BuildARQuiver := function(ModuleList, l)
                     Concatenation("L", String(layer_num+1), "E", String(arr[1])), # FROM
                     Concatenation("L", String(layer_num),   "E", String(arr[2]))  # TO
                 ]]);
-                #Print(arr, " \t FROM ", String(arr[1]) , " TO ", String(arr[2]),"\n");
             od;
             layer_num := layer_num + 1;
         od;
-        #Print(P);
-        #Print(P[2]);
     od;
 
     flatVerticesList := [];
@@ -43,7 +40,7 @@ BuildARQuiver := function(ModuleList, l)
         Append(flatVerticesList,[v.name]);
     od;
     Q := Quiver(flatVerticesList, arrows);
-    Display(Q);
+    return Q;
 end;
 
 #TEST
@@ -52,5 +49,5 @@ A := PathAlgebra(GF(3), Q);
 I := IndecInjectiveModules(A);
 
 
-BuildARQuiver([I[1]],4);
+Display(BuildARQuiver([I[1]],4));
 
