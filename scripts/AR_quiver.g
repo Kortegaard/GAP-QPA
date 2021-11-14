@@ -3,11 +3,12 @@ LoadPackage("QPA");
 
 
 BuildARQuiver := function(ModuleList, l)
-    local arrows, vertices, M, P, indec, n, vertexNam, layer, layer_num, entry_num, arr,  Q, dict,v_name,v, a, r, w,d, AddVertexIfNotIf,rads;
+    local arrows, vertices, M, n, Q, v, a, r, w, d, rads,
+    AddVertexIfNotIf, AddPredecessorsOfModule;
 
     arrows := [];
     vertices := [];
-    n:= 1; # Number of vertrices
+    n := 1; # Number of vertrices
 
     # Returns name if it is added
     # Returns false if not already in
@@ -16,7 +17,7 @@ BuildARQuiver := function(ModuleList, l)
         v_name := false;
 
         for v in vertices do
-            if IsomorphicModules(indec, v.module) then
+            if IsomorphicModules(N, v.module) then
                 v_name := v.name;
             fi;
         od;
@@ -34,7 +35,9 @@ BuildARQuiver := function(ModuleList, l)
         return [v_name, false];
     end;
 
-    for M in ModuleList do
+    AddPredecessorsOfModule := function(M, l)
+        local P, dict, layer_num, layer, entry_num, index, v, a, arr, vertices_added, indec;
+        vertices_added := 0;
         P := PredecessorsOfModule(M, l);
         dict := NewDictionary(false, true);
         layer_num := 1;
@@ -43,7 +46,7 @@ BuildARQuiver := function(ModuleList, l)
             for indec in layer do
                 v := AddVertexIfNotIf(indec);
                 if v[2] then
-                    n := n+1;
+                    vertices_added := vertices_added + 1;
                 fi;
                 AddDictionary(dict, [layer_num,entry_num], v[1]);
                 entry_num := entry_num + 1;
@@ -63,7 +66,15 @@ BuildARQuiver := function(ModuleList, l)
             od;
             layer_num := layer_num + 1;
         od;
+        return vertices_added;
+    end;
+
+
+
+    for M in ModuleList do
+        n := n + AddPredecessorsOfModule(M, l);
     od;
+
 
     for v in vertices do
         if IsProjectiveModule(v.module) then
@@ -82,6 +93,7 @@ BuildARQuiver := function(ModuleList, l)
     
     Q := Quiver(List(vertices, x -> x.name), arrows);
     return Q;
+
 end;
 
 #TEST
