@@ -8,15 +8,15 @@ LoadPackage("QPA");
 # Returns: Quiver, A part of the AR quiver.
 ConstructARQuiverNamed := function(ModuleList, l, NamingFunction)
     local arrows, vertices, M, Q, v, a, r, w, d, rads,
-    AddVertexIfNotIf, AddPredecessorsOfModule;
+    AddVertexIfNotIn, AddPredecessorsOfModule;
 
     arrows := [];
     vertices := [];
 
-    # Check if a module is already added (up to isomorphism), and if it is not it will add the nodule to vertices.
+    # Check if a module is already added (up to isomorphism), and if it is not it will add the module to vertices.
     #
     # Returns tuple: (name: string, did_add: bool) 
-    AddVertexIfNotIf := function(N)
+    AddVertexIfNotIn := function(N)
         local v, v_name;
         v_name := false;
 
@@ -58,7 +58,7 @@ ConstructARQuiverNamed := function(ModuleList, l, NamingFunction)
         for layer in P[1] do
             entry_num := 1;
             for indec in layer do
-                v := AddVertexIfNotIf(indec);
+                v := AddVertexIfNotIn(indec);
                 if v[2] then # if the vertex was just added
                     vertices_added := vertices_added + 1;
                 fi;
@@ -99,7 +99,7 @@ ConstructARQuiverNamed := function(ModuleList, l, NamingFunction)
             if Dimension(rads) = 0 then continue; fi;
             d := DecomposeModule(rads);
             for r in d do;
-                w := AddVertexIfNotIf(r);
+                w := AddVertexIfNotIn(r);
                 a := [w[1], v.name];
                 if not a in arrows then
                     Append(arrows, [a]);
