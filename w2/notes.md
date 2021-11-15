@@ -186,11 +186,6 @@ Where the arrows should be read as from left to right.
 
 
 
-```
-
-
-
-
 
 
 
