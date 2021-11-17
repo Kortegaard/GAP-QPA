@@ -88,7 +88,9 @@ ConstructARQuiverNamed := function(ModuleList, l, NamingFunction)
 
     # Running through each module given as input, and knitting their predecessors into the quiver.
     for M in ModuleList do
-        AddPredecessorsOfModule(M, l);
+        if not IsProjectiveModule(M) then
+            AddPredecessorsOfModule(M, l);
+        fi;
     od;
 
 
@@ -117,4 +119,5 @@ ConstructARQuiver := function(ModuleList, l)
     return ConstructARQuiverNamed(ModuleList, l, x -> String(DimensionVector(x.module)));
     #return ConstructARQuiverNamed(ModuleList, l, x -> Concatenation("v",String(x.numVertices)));
 end;
+
 
