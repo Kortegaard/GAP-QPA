@@ -7,7 +7,7 @@ Q := DynkinQuiver("A", 3, ["r","l"]);
 A := PathAlgebra(GF(3), Q);
 I := IndecInjectiveModules(A);
 
-AR_Q := ConstructARQuiver([I[1], I[3]],4);
+AR_Q := ConstructARQuiver([I[1], I[3], I[2]],4);
 
 Display("Q := 1 --> 2 <-- 3");
 Display(Concatenation("AR Quiver based from: ", String(DimensionVector(I[1])), ", ",String(DimensionVector(I[3]))));
