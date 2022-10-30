@@ -111,7 +111,7 @@ ConstructARQuiverNamed := function(ModuleList, l, NamingFunction)
     od;
     
     Q := Quiver(List(vertices, x -> x.name), arrows);
-    return Q;
+    return [Q, vertices];
 
 end;
 
